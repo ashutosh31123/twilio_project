@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv('.env.local')
 
-def send_stock_alerts(stock_name, company_name, user_phone_number):
+def send_stock_alerts(stock_name, company_name):
     STOCK_ENDPOINT = "https://www.alphavantage.co/query"
     NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
     alpha_vantage_api_key = os.getenv('ALPHA_VANTAGE_KEY')
@@ -49,7 +49,7 @@ def send_stock_alerts(stock_name, company_name, user_phone_number):
             message = client.messages.create(
                 body=article,
                 from_=twilio_phone_number,
-                to=user_phone_number
+                to='+917855947521'
             )
             all_messages.append(article)
 
@@ -63,9 +63,8 @@ st.title('Stock Alert System')
 with st.form("stock_alert_form"):
     st_input_stock_name = st.text_input("Stock Symbol", value="QCOM")
     st_input_company_name = st.text_input("Company Name", value="QUALCOMM")
-    st_input_phone_number = st.text_input("Your Phone Number", value="+917855947521")
     submitted = st.form_submit_button("Send Alert")
 
 if submitted:
-    result = send_stock_alerts(st_input_stock_name, st_input_company_name, st_input_phone_number)
+    result = send_stock_alerts(st_input_stock_name, st_input_company_name)
     st.success(result)
