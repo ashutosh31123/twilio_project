@@ -44,13 +44,16 @@ def send_stock_alerts(stock_name, company_name, user_phone_number):
         formatted_articles = [f"{stock_name}: {up_down}{diff_percent:.2f}%\nHeadline: {article['title']}, \nBrief: {article['description']}" for article in articles]
 
         client = Client(twilio_account_sid, twilio_auth_token)
+        all_messages = []
         for article in formatted_articles:
             message = client.messages.create(
                 body=article,
                 from_=twilio_phone_number,
                 to=user_phone_number
             )
-        return "Messages sent successfully!"
+            all_messages.append(article)
+
+        return f"The message has been sent to your phone and it is:\n\n" + "\n\n".join(all_messages)
     else:
         return "No significant movement detected."
 
